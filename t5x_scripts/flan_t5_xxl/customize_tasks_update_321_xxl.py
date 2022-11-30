@@ -45,7 +45,8 @@ def customize_finetuning_dataset_fn(split, shuffle_files=False, seed=None, datas
 				num_parallel_calls=tf.data.experimental.AUTOTUNE)
 	#ds = ds.shuffle(100000, reshuffle_each_iteration=True)
 	ds = ds.map(lambda *ex: dict(zip(["input", "output"], ex)), num_parallel_calls=tf.data.experimental.AUTOTUNE)
-	
+	# 缓存实验试试
+	ds = ds.cache()
 	return ds
 
 def customize_pretrain_dataset_fn_mt(split, shuffle_files=False, seed=None, lang="multilingual"):
@@ -159,28 +160,50 @@ task_glob_num_str = "*"
 logging.info(f"limit_num:{limit_num}, train task size:{len(task_weights)}")
 logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
 # 各个数据集注册任务以及分配权重
-
+i = 0
 for item in task_weights.keys():
+	i += 1
+	if i == 1:
+		seqio.TaskRegistry.add(item.replace("-", "_"),
+			# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
+			source=seqio.FunctionDataSource(
+				dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=item,
+											glob_num_str=task_glob_num_str),
+				splits=["train", "dev"]
+			),
+			# 定义数据预处理器（数据送进model之前需要做的处理）
+			preprocessors=[
+				customize_finetuning_preprocessor,
+				seqio.preprocessors.tokenize_and_append_eos,
+			],
+			# 定义数据后处理器 (数据从model输出之后需要做的处理）
+			#postprocess_fn=t5.data.postprocessors.lower_text,
+			# 定义评价指标
+			metric_fns=[metrics.accuracy], # [customize_metric],
+			# 输出token解码方式
+			output_features=DEFAULT_OUTPUT_FEATURES,
+		)
+	else:
+		seqio.TaskRegistry.add(item.replace("-", "_"),
+			# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
+			source=seqio.FunctionDataSource(
+				dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=item,
+											glob_num_str=task_glob_num_str),
+				splits=["train"]
+			),
+			# 定义数据预处理器（数据送进model之前需要做的处理）
+			preprocessors=[
+				customize_finetuning_preprocessor,
+				seqio.preprocessors.tokenize_and_append_eos,
+			],
+			# 定义数据后处理器 (数据从model输出之后需要做的处理）
+			#postprocess_fn=t5.data.postprocessors.lower_text,
+			# 定义评价指标
+			metric_fns=[metrics.accuracy], # [customize_metric],
+			# 输出token解码方式
+			output_features=DEFAULT_OUTPUT_FEATURES,
+		)
 
-	seqio.TaskRegistry.add(item.replace("-", "_"),
-		# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
-		source=seqio.FunctionDataSource(
-			dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=item,
-										glob_num_str=task_glob_num_str),
-			splits=["train", "dev"]
-		),
-		# 定义数据预处理器（数据送进model之前需要做的处理）
-		preprocessors=[
-			customize_finetuning_preprocessor,
-			seqio.preprocessors.tokenize_and_append_eos,
-		],
-		# 定义数据后处理器 (数据从model输出之后需要做的处理）
-		#postprocess_fn=t5.data.postprocessors.lower_text,
-		# 定义评价指标
-		metric_fns=[metrics.accuracy], # [customize_metric],
-		# 输出token解码方式
-		output_features=DEFAULT_OUTPUT_FEATURES,
-	)
 
 	'''
 	seqio.TaskRegistry.add(item.replace("-", "_") + "_decoder",
