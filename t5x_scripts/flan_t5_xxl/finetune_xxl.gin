@@ -12,11 +12,11 @@ import tasks
 include 't5x/configs/runs/finetune.gin'
 include 't5x/examples/t5/t5_1_1/xxl.gin'
 
-BATCH_SIZE = 64
+BATCH_SIZE = 128
 MIXTURE_OR_TASK_NAME = "clueai_mt"
 TASK_FEATURE_LENGTHS = {'inputs': 512, 'targets': 512}
 DROPOUT_RATE = 0.05
-TRAIN_STEPS = 1_115_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
+TRAIN_STEPS = 1_214_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
 
 INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/flan_t5_xxl/checkpoint_1114000"
 
@@ -27,7 +27,7 @@ INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/flan_t5_xxl/checkp
 LOSS_NORMALIZING_FACTOR = 233472
 
 train_script.train:
-  eval_period = 500
+  eval_period = 5000
   eval_steps = 20
   random_seed = 0
   use_hardware_rng = True
@@ -100,7 +100,7 @@ infer_eval/utils.DatasetConfig:
   module = %MIXTURE_OR_TASK_MODULE
 
 utils.SaveCheckpointConfig:
-  period = 1000  # checkpoint frequency
+  period = 10000  # checkpoint frequency
   #keep = 1
   keep = None 
 
