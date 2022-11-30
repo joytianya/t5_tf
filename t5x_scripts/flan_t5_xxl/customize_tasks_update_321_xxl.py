@@ -36,7 +36,7 @@ def customize_finetuning_dataset_fn(split, shuffle_files=False, seed=None, datas
 		glob_num_str = "[0][0][0][0][0][0]"
 	csvdata = f"gs://clueai/data/zxw/tf/data/csvdata_replace_huanhang_multi_files/{dataset_type}/{dataset_name}/*{split}-{glob_num_str}.csv" 
 	logging.info(f"csvdata: {csvdata}")
-	files_dataset = tf.data.TextLineDataset.list_files(csvdata)
+	files_dataset = tf.data.TextLineDataset.list_files(csvdata, shuffle=True)
 	ds = tf.data.TextLineDataset(files_dataset)
 	ds = ds.map(functools.partial(tf.io.decode_csv,
 								  record_defaults=["", ""],
