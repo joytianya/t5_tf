@@ -12,7 +12,7 @@ import tasks
 include 't5x/configs/runs/finetune.gin'
 include 't5x/examples/t5/t5_1_1/xxl.gin'
 
-BATCH_SIZE = 4
+BATCH_SIZE = 64
 MIXTURE_OR_TASK_NAME = "clueai_mt"
 TASK_FEATURE_LENGTHS = {'inputs': 512, 'targets': 512}
 DROPOUT_RATE = 0.05
