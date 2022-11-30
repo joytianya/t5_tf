@@ -1,0 +1,19 @@
+/home/brightmart999/zxw/codeup/t5_tf/t5x_scripts/t5x/t5x/utils.py
+/home/brightmart999/.local/lib/python3.8/site-packages/seqio/dataset_providers.py
+
+
+
+
+
+安装t5x:
+1. git clone --branch=main https://github.com/google-research/t5x
+2. cd t5x
+3. python3 -m pip install -e '.[tpu]' -f  https://storage.googleapis.com/jax-releases/libtpu_releases.html
+4. pip install tensorflow-text==2.11.0
+5. pip install "jax[tpu]>=0.2.16" -f https://storage.googleapis.com/jax-releases/libtpu_releases.html
+
+还需要修改一些
+/home/brightmart999/zxw/codeup/t5_tf/t5x_scripts/t5x/t5x/utils.py
+/home/brightmart999/.local/lib/python3.8/site-packages/seqio/dataset_providers.py
+
+参考https://codeup.aliyun.com/623bd8d03add99e4db454b0e/t5_tf

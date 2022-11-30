@@ -1,0 +1,110 @@
+from __gin__ import dynamic_registration
+
+import __main__ as train_script
+
+from t5.data import mixtures
+from t5x import models
+from t5x import partitioning
+from t5x import utils
+import customize_tasks_update_321_xxl
+import tasks
+
+include 't5x/configs/runs/finetune.gin'
+#include 't5x/examples/scalable_t5/t5_1_1/base.gin'
+include 't5x/examples/t5/t5_1_1/base.gin'
+
+BATCH_SIZE = 8
+MIXTURE_OR_TASK_NAME = "clueai_mt"
+TASK_FEATURE_LENGTHS = {'inputs': 32, 'targets':32} 
+DROPOUT_RATE = 0.05
+TRAIN_STEPS = 1_187_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
+
+INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/flan_t5_base/checkpoint_1184000"
+
+# `LOSS_NORMALIZING_FACTOR`: When fine-tuning a model that was pre-trained
+# using Mesh Tensorflow (e.g. the public T5 / mT5 / ByT5 models), this should be
+# set to `pretraining batch_size` * `target_token_length`. For T5 and T5.1.1:
+# `2048 * 114`. For mT5: `1024 * 229`. For ByT5: `1024 * 189`.
+LOSS_NORMALIZING_FACTOR = 233472
+
+train_script.train:
+  eval_period = 500
+  eval_steps = 20
+  random_seed = 0
+  use_hardware_rng = True
+
+from t5x import partitioning
+
+#train_script.train:
+#  partitioner = @partitioning.PjitPartitioner()
+#
+#partitioning.PjitPartitioner:
+#  num_partitions = 8
+#  logical_axis_rules= @partitioning.standard_logical_axis_rules()
+#
+#partitioning.standard_logical_axis_rules:
+#  activation_partitioning_dims = 2
+#  parameter_partitioning_dims = 2
+
+partitioning.PjitPartitioner.num_partitions = 2
+
+partitioning.PjitPartitioner.logical_axis_rules = [
+    ('batch', 'data'),
+    ('mlp', 'model'),
+    ('heads', 'model'),
+    ('vocab', 'model'),
+    # shard both activations and weight matrices on the remaining available axis
+    ('embed', 'model'),
+    ('embed', 'data'),
+    ('kv', None),
+    ('joined_kv', None),
+    ('relpos_buckets', None),
+    ('abspos_buckets', None),
+    ('length', None),
+    ('layers', None),
+    ('stack', None),
+    ('mlp_activations', None),
+]
+
+train/utils.DatasetConfig:
+  mixture_or_task_name = %MIXTURE_OR_TASK_NAME
+  task_feature_lengths = %TASK_FEATURE_LENGTHS
+  split = 'train'
+  batch_size = %BATCH_SIZE
+  shuffle = True
+  seed = None  # use a new seed each run/restart
+  use_cached = %USE_CACHED_TASKS
+  pack = True
+  module = %MIXTURE_OR_TASK_MODULE
+
+train_eval/utils.DatasetConfig:
+  mixture_or_task_name = %MIXTURE_OR_TASK_NAME
+  task_feature_lengths = %TASK_FEATURE_LENGTHS
+  split = 'dev'
+  batch_size = %BATCH_SIZE
+  shuffle = False
+  seed = 42
+  use_cached = %USE_CACHED_TASKS
+  pack = True
+  module = %MIXTURE_OR_TASK_MODULE
+
+infer_eval/utils.DatasetConfig:
+  mixture_or_task_name = %MIXTURE_OR_TASK_NAME
+  task_feature_lengths = None  # compute max
+  split = 'dev'
+  batch_size = %BATCH_SIZE
+  shuffle = False
+  seed = 42
+  use_cached = %USE_CACHED_TASKS
+  pack = False
+  module = %MIXTURE_OR_TASK_MODULE
+
+utils.SaveCheckpointConfig:
+  period = 500  # checkpoint frequency
+  #keep = 1
+  keep = None 
+
+utils.create_learning_rate_scheduler:
+  factors = 'constant'
+  base_learning_rate = 0.0005
+  warmup_steps = 1000
