@@ -28,7 +28,7 @@ LOSS_NORMALIZING_FACTOR = 233472
 
 train_script.train:
   eval_period = 5000
-  eval_steps = 20
+  eval_steps = 10
   random_seed = 0
   use_hardware_rng = True
 

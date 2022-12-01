@@ -46,7 +46,7 @@ def customize_finetuning_dataset_fn(split, shuffle_files=False, seed=None, datas
 	#ds = ds.shuffle(100000, reshuffle_each_iteration=True)
 	ds = ds.map(lambda *ex: dict(zip(["input", "output"], ex)), num_parallel_calls=tf.data.experimental.AUTOTUNE)
 	# 缓存实验试试
-	ds = ds.cache()
+	#ds = ds.cache()
 	return ds
 
 def customize_pretrain_dataset_fn_mt(split, shuffle_files=False, seed=None, lang="multilingual"):
