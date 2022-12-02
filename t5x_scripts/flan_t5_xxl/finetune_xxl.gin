@@ -27,7 +27,7 @@ INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/flan_t5_xxl/checkp
 LOSS_NORMALIZING_FACTOR = 233472
 
 train_script.train:
-  eval_period = 5000
+  eval_period = 8000
   eval_steps = 1
   random_seed = 0
   use_hardware_rng = True
