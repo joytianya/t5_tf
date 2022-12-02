@@ -100,7 +100,7 @@ infer_eval/utils.DatasetConfig:
   module = %MIXTURE_OR_TASK_MODULE
 
 utils.SaveCheckpointConfig:
-  period = 10000  # checkpoint frequency
+  period = 8000  # checkpoint frequency
   #keep = 1
   keep = None 
 
