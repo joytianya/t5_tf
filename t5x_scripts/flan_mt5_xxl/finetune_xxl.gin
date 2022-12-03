@@ -10,21 +10,21 @@ import customize_tasks_update_321_xxl
 import tasks
 
 include 't5x/configs/runs/finetune.gin'
-include 't5x/examples/t5/t5_1_1/xxl.gin'
+include 't5x/examples/t5/mt5/xxl.gin'
 
 BATCH_SIZE = 128
 MIXTURE_OR_TASK_NAME = "clueai_mt"
 TASK_FEATURE_LENGTHS = {'inputs': 512, 'targets': 512}
 DROPOUT_RATE = 0.05
-TRAIN_STEPS = 1_214_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
+TRAIN_STEPS = 1_200_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
 
-INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/flan_t5_xxl/checkpoint_1114000"
+INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/mt5_lm_adapted/xxl/checkpoint_1100000"
 
 # `LOSS_NORMALIZING_FACTOR`: When fine-tuning a model that was pre-trained
 # using Mesh Tensorflow (e.g. the public T5 / mT5 / ByT5 models), this should be
 # set to `pretraining batch_size` * `target_token_length`. For T5 and T5.1.1:
 # `2048 * 114`. For mT5: `1024 * 229`. For ByT5: `1024 * 189`.
-LOSS_NORMALIZING_FACTOR = 233472
+LOSS_NORMALIZING_FACTOR = 234496
 
 train_script.train:
   eval_period = 8000

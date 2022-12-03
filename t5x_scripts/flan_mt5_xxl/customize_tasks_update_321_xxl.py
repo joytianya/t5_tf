@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 #DEFAULT_SPM_PATH = "gs://clueai/data/brightdata/m0905_32128.model" # m0905_v0.model"
 #DEFAULT_SPM_PATH = "gs://clueai/data/zxw/tf/spm/lanzhou/spiece.model"
 #DEFAULT_SPM_PATH = "gs://clueai/data/zxw/tf/spm/clueai/spm_clueai_0920.model"
-DEFAULT_SPM_PATH = "gs://t5-data/vocabs/cc_all.32000.100extra/sentencepiece.model"
+DEFAULT_SPM_PATH = "gs://t5-data/vocabs/mc4.250000.100extra/sentencepiece.model"
 DEFAULT_VOCAB = t5.data.SentencePieceVocabulary(DEFAULT_SPM_PATH)
 
 DEFAULT_OUTPUT_FEATURES = {
