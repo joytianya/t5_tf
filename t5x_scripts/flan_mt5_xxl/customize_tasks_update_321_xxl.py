@@ -163,7 +163,7 @@ logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_wei
 i = 0
 for item in task_weights.keys():
 	i += 1
-	if i <= 1:
+	if i <= 1000:
 		seqio.TaskRegistry.add(item.replace("-", "_"),
 			# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 			source=seqio.FunctionDataSource(
