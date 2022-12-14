@@ -165,7 +165,7 @@ task_weights_168 = {'kg_clue': 19731218, 'LCCD': 14677547, 'nlpcc2015_task5': 85
 task_weights = task_weights_168
 
 limit_num = 10000000
-task_glob_num_str = "[0][0][0][0-9][0-9][0-9]"
+task_glob_num_str = "[0][0][0][0][0][0-9]"
 #task_glob_num_str = "*"
 logging.info(f"limit_num:{limit_num}, train task size:{len(task_weights)}")
 #logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
