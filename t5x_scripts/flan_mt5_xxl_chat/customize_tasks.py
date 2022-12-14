@@ -265,7 +265,7 @@ for item in task_weights.keys():
 
 #dataset_name = "iflytek_chinese_match"
 dataset_name = "*"
-pretrain_task_glob_num_str = "[0][0][0][0][0-2][0-9]"
+pretrain_task_glob_num_str = "[0][0][0][0][0][0-9]"
 seqio.TaskRegistry.add( "pretrain_mt_decoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 	source=seqio.FunctionDataSource(
