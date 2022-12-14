@@ -168,7 +168,8 @@ limit_num = 100000000
 #task_glob_num_str = "[0][0][0][0][0][0]"
 task_glob_num_str = "*"
 logging.info(f"limit_num:{limit_num}, train task size:{len(task_weights)}")
-logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
+#logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
+logging.info(f"all_task size:{len(task_weights_168)}, train task size:{len(task_weights)}")
 # 各个数据集注册任务以及分配权重
 i = 0
 for item in task_weights.keys():
@@ -264,11 +265,12 @@ for item in task_weights.keys():
 
 #dataset_name = "iflytek_chinese_match"
 dataset_name = "*"
+pretrain_task_glob_num_str = "[0][0][0][0][0-2][0-9]"
 seqio.TaskRegistry.add( "pretrain_mt_decoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 	source=seqio.FunctionDataSource(
 		dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=dataset_name,
-									glob_num_str="*"),
+									glob_num_str=pretrain_task_glob_num_str),
 		splits=["train"]
 	),
 	# 定义数据预处理器（数据送进model之前需要做的处理）
@@ -288,7 +290,7 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 	source=seqio.FunctionDataSource(
 		dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=dataset_name,
-									glob_num_str="*"),
+									glob_num_str=pretrain_task_glob_num_str),
 		splits=["train"]
 	),
 	preprocessors=[
@@ -313,7 +315,7 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder_decoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 	source=seqio.FunctionDataSource(
 		dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=dataset_name,
-									glob_num_str="*"),
+									glob_num_str=pretrain_task_glob_num_str),
 		splits=["train"]
 	),
 	preprocessors=[
@@ -353,7 +355,7 @@ logging.info(f"sum weight: {sum_weight}")
 #clueai_mt_weights_encoder = [(k.replace("-", "_") + "_encoder", _weight(v)) for k, v in task_weights.items()]
 #clueai_mt_weights_decoder = [(k.replace("-", "_") + "_decoder", _weight(v)) for k, v in task_weights.items()]
 #clueai_mt_weights_all = clueai_mt_weights + clueai_mt_weights_encoder + clueai_mt_weights_decoder
-clueai_mt_weights_all = clueai_mt_weights + [("pretrain_mt_decoder", sum_weight), ("pretrain_mt_encoder", sum_weight), ("pretrain_mt_encoder_decoder", sum_weight)]
+clueai_mt_weights_all = clueai_mt_weights + [("pretrain_mt_decoder", sum_weight//4), ("pretrain_mt_encoder", sum_weight//4), ("pretrain_mt_encoder_decoder", sum_weight//4)]
 seqio.MixtureRegistry.add(
 	# Mixture名称
 	"clueai_mt_weights_all", # ValueError: No Task or Mixture found with name 'clueai_corpus'. Available:
@@ -415,7 +417,7 @@ seqio.TaskRegistry.add(
 
 # 混合多个任务
 #clueai_corpus_mt_weights = [("clueai_corpus", 2*sum_weight), ("clueai_mt_pretain_corpus", sum_weight)] + clueai_mt_weights
-clueai_corpus_mt_weights = [("clueai_corpus", sum_weight)]  + clueai_mt_weights_all
+clueai_corpus_mt_weights = [("clueai_corpus", sum_weight//4)]  + clueai_mt_weights_all
 #clueai_corpus_mt_weights = clueai_mt_weights_all
 logging.info(f"clueai_corpus_mt_weights:{clueai_corpus_mt_weights}")
 seqio.MixtureRegistry.add(
