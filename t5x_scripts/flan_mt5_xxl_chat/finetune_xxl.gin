@@ -12,10 +12,10 @@ import tasks
 include 't5x/configs/runs/finetune.gin'
 include 't5x/examples/t5/mt5/xxl.gin'
 
-BATCH_SIZE = 128
+BATCH_SIZE = 256
 #MIXTURE_OR_TASK_NAME = "clueai_mt"
 MIXTURE_OR_TASK_NAME = "clueai_corpus_mt"
-TASK_FEATURE_LENGTHS = {'inputs': 512, 'targets': 512}
+TASK_FEATURE_LENGTHS = {'inputs': 256, 'targets': 256}
 DROPOUT_RATE = 0.05
 TRAIN_STEPS = 2_200_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
 USE_CACHED_TASKS = False
@@ -102,8 +102,15 @@ infer_eval/utils.DatasetConfig:
   pack = False
   module = %MIXTURE_OR_TASK_MODULE
 
+# bfloat16
+utils.RestoreCheckpointConfig:
+  path = %INITIAL_CHECKPOINT_PATH
+  mode = 'specific'
+  dtype = 'float32'
+
 utils.SaveCheckpointConfig:
   period = 8000  # checkpoint frequency
+  dtype = 'float32'
   #keep = 1
   keep = None 
 

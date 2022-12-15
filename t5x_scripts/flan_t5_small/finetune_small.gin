@@ -12,11 +12,11 @@ import tasks
 include 't5x/configs/runs/finetune.gin'
 include 't5x/examples/t5/t5_1_1/small.gin'
 
-BATCH_SIZE = 8
+BATCH_SIZE = 1024
 MIXTURE_OR_TASK_NAME = "clueai_mt"
-TASK_FEATURE_LENGTHS = {'inputs': 128, 'targets': 16}
+TASK_FEATURE_LENGTHS = {'inputs': 512, 'targets': 512}
 DROPOUT_RATE = 0.05
-TRAIN_STEPS = 1_199_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
+TRAIN_STEPS = 1_298_000  # 1000000 pre-trained steps + 20000 fine-tuning steps.
 
 INITIAL_CHECKPOINT_PATH = "gs://t5-data/pretrained_models/t5x/flan_t5_small/checkpoint_1198000"
 

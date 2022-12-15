@@ -165,7 +165,7 @@ task_weights_168 = {'kg_clue': 19731218, 'LCCD': 14677547, 'nlpcc2015_task5': 85
 task_weights = task_weights_168
 
 limit_num = 10000000
-task_glob_num_str = "[0][0][0][0][0][0-9]"
+task_glob_num_str = "[0][0][0][0][0-7][0-9]"
 #task_glob_num_str = "*"
 logging.info(f"limit_num:{limit_num}, train task size:{len(task_weights)}")
 #logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
@@ -265,13 +265,13 @@ for item in task_weights.keys():
 
 #dataset_name = "iflytek_chinese_match"
 dataset_name = "*"
-pretrain_task_glob_num_str = "[0][0][0][0][0][0-9]"
+pretrain_task_glob_num_str = "[0][0][0][0][0-7][0-9]"
 seqio.TaskRegistry.add( "pretrain_mt_decoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 	source=seqio.FunctionDataSource(
 		dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=dataset_name,
 									glob_num_str=pretrain_task_glob_num_str),
-		splits=["train"]
+		splits=["train", "dev"]
 	),
 	# 定义数据预处理器（数据送进model之前需要做的处理）
 	preprocessors=[
@@ -291,7 +291,7 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder",
 	source=seqio.FunctionDataSource(
 		dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=dataset_name,
 									glob_num_str=pretrain_task_glob_num_str),
-		splits=["train"]
+		splits=["train", "dev"]
 	),
 	preprocessors=[
 		customize_pretrain_preprocessor_encoder,
@@ -316,7 +316,7 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder_decoder",
 	source=seqio.FunctionDataSource(
 		dataset_fn=functools.partial(customize_finetuning_dataset_fn, dataset_name=dataset_name,
 									glob_num_str=pretrain_task_glob_num_str),
-		splits=["train"]
+		splits=["train", "dev"]
 	),
 	preprocessors=[
 		customize_pretrain_preprocessor_encoder_decoder,

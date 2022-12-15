@@ -1,8 +1,8 @@
 PWD=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-#SIZE="small"
+SIZE="small"
 #SIZE="base"
 #SIZE="xl"
-SIZE="xxl"
+#SIZE="xxl"
 PROJECT_DIR=$PWD/flan_mt5_$SIZE
 #PROJECT_DIR=$PWD/
 T5X_DIR=$PWD/t5x/  # directory where the T5X repo is cloned.
