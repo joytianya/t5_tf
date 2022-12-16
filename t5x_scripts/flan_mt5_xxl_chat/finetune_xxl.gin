@@ -109,7 +109,7 @@ utils.RestoreCheckpointConfig:
   dtype = 'float32'
 
 utils.SaveCheckpointConfig:
-  period = 8000  # checkpoint frequency
+  period = 4000  # checkpoint frequency
   dtype = 'float32'
   #keep = 1
   keep = None 

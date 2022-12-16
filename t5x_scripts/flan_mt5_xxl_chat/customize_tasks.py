@@ -306,10 +306,11 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder",
 		#t5.data.preprocessors.prefix_lm,
 		seqio.preprocessors.append_eos_after_trim,
 	],
-output_features=DEFAULT_OUTPUT_FEATURES,
-# output_features=t5.data.Feature(vocabulary=t5.data.SentencePieceVocabulary(my_custom_vocab_model_path)),
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    # output_features=t5.data.Feature(vocabulary=t5.data.SentencePieceVocabulary(my_custom_vocab_model_path)),
 
-metric_fns=[])
+    metric_fns=[metrics.accuracy],
+)
 
 seqio.TaskRegistry.add( "pretrain_mt_encoder_decoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
@@ -331,10 +332,11 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder_decoder",
 		t5.data.preprocessors.prefix_lm,
 		seqio.preprocessors.append_eos_after_trim,
 	],
-output_features=DEFAULT_OUTPUT_FEATURES,
-# output_features=t5.data.Feature(vocabulary=t5.data.SentencePieceVocabulary(my_custom_vocab_model_path)),
+    output_features=DEFAULT_OUTPUT_FEATURES,
+    # output_features=t5.data.Feature(vocabulary=t5.data.SentencePieceVocabulary(my_custom_vocab_model_path)),
 
-metric_fns=[])
+    metric_fns=[metrics.accuracy],
+)
 
 
 # 分配权重
