@@ -106,11 +106,11 @@ infer_eval/utils.DatasetConfig:
 utils.RestoreCheckpointConfig:
   path = %INITIAL_CHECKPOINT_PATH
   mode = 'specific'
-  dtype = 'float32'
+  dtype = 'bfloat16'
 
 utils.SaveCheckpointConfig:
   period = 4000  # checkpoint frequency
-  dtype = 'float32'
+  dtype = 'bfloat16'
   #keep = 1
   keep = None 
 
