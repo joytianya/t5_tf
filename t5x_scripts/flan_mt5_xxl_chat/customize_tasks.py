@@ -281,7 +281,8 @@ seqio.TaskRegistry.add( "pretrain_mt_decoder",
 	# 定义数据后处理器 (数据从model输出之后需要做的处理）
 	#postprocess_fn=t5.data.postprocessors.lower_text,
 	# 定义评价指标
-	metric_fns=[metrics.accuracy], # [customize_metric],
+	#metric_fns=[metrics.accuracy], # [customize_metric],
+	metric_fns=[], # [customize_metric],
 	# 输出token解码方式
 	output_features=DEFAULT_OUTPUT_FEATURES,
 )
@@ -309,7 +310,8 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder",
     output_features=DEFAULT_OUTPUT_FEATURES,
     # output_features=t5.data.Feature(vocabulary=t5.data.SentencePieceVocabulary(my_custom_vocab_model_path)),
 
-    metric_fns=[metrics.accuracy],
+    #metric_fns=[metrics.accuracy],
+    metric_fns=[],
 )
 
 seqio.TaskRegistry.add( "pretrain_mt_encoder_decoder",
@@ -335,7 +337,7 @@ seqio.TaskRegistry.add( "pretrain_mt_encoder_decoder",
     output_features=DEFAULT_OUTPUT_FEATURES,
     # output_features=t5.data.Feature(vocabulary=t5.data.SentencePieceVocabulary(my_custom_vocab_model_path)),
 
-    metric_fns=[metrics.accuracy],
+    metric_fns=[],
 )
 
 
