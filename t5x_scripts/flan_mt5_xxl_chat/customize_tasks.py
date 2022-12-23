@@ -168,7 +168,7 @@ task_weights_170["person_role"] = 10000
 task_weights = task_weights_170
 
 limit_num = 10000000
-task_glob_num_str = "[0][0][0][0-4][0-9][0-9]"
+task_glob_num_str = "[0][0][0][0-9][0-9][0-9]"
 #task_glob_num_str = "*"
 logging.info(f"limit_num:{limit_num}, train task size:{len(task_weights)}")
 #logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
@@ -268,7 +268,7 @@ for item in task_weights.keys():
 
 #dataset_name = "iflytek_chinese_match"
 dataset_name = "*"
-pretrain_task_glob_num_str = "[0][0][0][0-4][0-9][0-9]"
+pretrain_task_glob_num_str = "[0][0][0][0-9][0-9][0-9]"
 seqio.TaskRegistry.add( "pretrain_mt_decoder",
 	# 定义数据源(传入了一个函数，这个函数的返回就是数据源)
 	source=seqio.FunctionDataSource(
