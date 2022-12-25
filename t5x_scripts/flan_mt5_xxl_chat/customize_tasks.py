@@ -424,7 +424,7 @@ seqio.TaskRegistry.add(
 
 # 混合多个任务
 #clueai_corpus_mt_weights = [("clueai_corpus", 2*sum_weight), ("clueai_mt_pretain_corpus", sum_weight)] + clueai_mt_weights
-clueai_corpus_mt_weights = [("clueai_corpus", sum_weight//4)]  + clueai_mt_weights_all
+clueai_corpus_mt_weights = [("clueai_corpus", sum_weight//2)]  + clueai_mt_weights_all
 #clueai_corpus_mt_weights = clueai_mt_weights_all
 logging.info(f"clueai_corpus_mt_weights:{clueai_corpus_mt_weights}")
 seqio.MixtureRegistry.add(
