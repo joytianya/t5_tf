@@ -170,7 +170,7 @@ task_weights_170["user_feedback"] = 10000
 task_weights = task_weights_170
 
 limit_num = 10000000
-task_glob_num_str = "[0][0][0][0-9][0-9][0-9]"
+task_glob_num_str = "[0][0][0-9][0-9][0-9][0-9]"
 #task_glob_num_str = "*"
 logging.info(f"limit_num:{limit_num}, train task size:{len(task_weights)}")
 #logging.info(f"zero_eval_task:{len(zero_eval_task)}, all_task size:{len(task_weights_321)}, train task size:{len(task_weights)}")
@@ -427,7 +427,7 @@ seqio.TaskRegistry.add(
 
 # 混合多个任务
 #clueai_corpus_mt_weights = [("clueai_corpus", 2*sum_weight), ("clueai_mt_pretain_corpus", sum_weight)] + clueai_mt_weights
-clueai_corpus_mt_weights = [("clueai_corpus", sum_weight//3)]  + clueai_mt_weights_all
+clueai_corpus_mt_weights = [("clueai_corpus", sum_weight//10)]  + clueai_mt_weights_all
 #clueai_corpus_mt_weights = clueai_mt_weights_all
 logging.info(f"clueai_corpus_mt_weights:{clueai_corpus_mt_weights}")
 seqio.MixtureRegistry.add(
